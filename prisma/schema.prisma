@@ -1,0 +1,74 @@
+model Prestador {
+  id          String   @id @default(uuid())
+  tipoPessoa  TipoPessoa
+  cpf         String?  @unique
+  cnpj        String?  @unique
+  xNome       String   // Razão social / nome
+  im          String?  // Indicador municipal
+  cMun        String   // Código IBGE (cLocEmi / cMun)
+  cep         String?
+  logradouro  String?
+  numero      String?
+  bairro      String?
+  email       String?
+  telefone    String?
+  opSimpNac   Int      // 1,2,3 conforme ANEXO I
+  regEspTrib  Int      // 0..7
+  createdAt   DateTime @default(now())
+  notasEmitidas NotaFiscal[] @relation("PrestadorNotas")
+}
+
+model Tomador {
+  id          String   @id @default(uuid())
+  tipoPessoa  TipoPessoa
+  cpf         String?  @unique
+  cnpj        String?  @unique
+  xNome       String
+  cMun        String
+  cep         String?
+  logradouro  String?
+  numero      String?
+  bairro      String?
+  email       String?
+  telefone    String?
+  createdAt   DateTime @default(now())
+  notasRecebidas NotaFiscal[] @relation("TomadorNotas")
+}
+
+model NotaFiscal {
+  id           String   @id @default(uuid())
+  serie        Int
+  nDPS         Int
+  tpAmb        Int      // 1-Produção, 2-Homologação
+  dCompet      DateTime
+  cLocEmi      String   // Município emissor (prestador)
+  cLocPrest    String   // Município da prestação (locPrest/cLocPrestacao)
+  cTribNac     String   // Código de tributação nacional (anexo B)
+  xDescServ    String
+  vServ        Float
+  issRetidoPor String   // 'NAO', 'TOMADOR', 'INTERMEDIARIO'
+  status       String   // 'RASCUNHO', 'ENVIADA', 'CANCELADA'
+  xmlGerado    String?
+
+  prestador   Prestador @relation("PrestadorNotas", fields: [prestadorId], references: [id])
+  prestadorId String
+
+  tomador     Tomador   @relation("TomadorNotas", fields: [tomadorId], references: [id])
+  tomadorId   String
+
+  createdAt   DateTime  @default(now())
+}
+
+enum TipoPessoa {
+  PF
+  PJ
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}

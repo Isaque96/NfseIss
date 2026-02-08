@@ -39,3 +39,4 @@ Thumbs.db
 # Arquivos temporários de teste/geração
 temp/
 output/*.xml
+/src/generated/prisma
