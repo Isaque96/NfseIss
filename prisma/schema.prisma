@@ -1,3 +1,29 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+enum TipoPessoa {
+  PF
+  PJ
+}
+
+enum IssRetidoPor {
+  NAO
+  TOMADOR
+  INTERMEDIARIO
+}
+
+enum StatusNota {
+  RASCUNHO
+  ENVIADA
+  CANCELADA
+}
+
 model Prestador {
   id          String   @id @default(uuid())
   tipoPessoa  TipoPessoa
@@ -46,8 +72,8 @@ model NotaFiscal {
   cTribNac     String   // Código de tributação nacional (anexo B)
   xDescServ    String
   vServ        Float
-  issRetidoPor String   // 'NAO', 'TOMADOR', 'INTERMEDIARIO'
-  status       String   // 'RASCUNHO', 'ENVIADA', 'CANCELADA'
+  issRetidoPor IssRetidoPor
+  status       StatusNota
   xmlGerado    String?
 
   prestador   Prestador @relation("PrestadorNotas", fields: [prestadorId], references: [id])
@@ -59,16 +85,3 @@ model NotaFiscal {
   createdAt   DateTime  @default(now())
 }
 
-enum TipoPessoa {
-  PF
-  PJ
-}
-
-generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
-}
-
-datasource db {
-  provider = "sqlite"
-}
