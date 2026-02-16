@@ -4,11 +4,11 @@ export interface TributacaoMunicipalIssqn {
   indTribMun: TipoTributacao;
   cMunIncid: string;
   cPaisIncid?: string;
-  indExigISS: IndicadorExigibilidadeIss;
-  vBCISS: number;
-  pAliqISS: number;
-  vISS: number;
+  indExigIss: IndicadorExigibilidadeIss;
+  vBciss: number;
+  pAliqIss: number;
+  vIss: number;
   indIncentivo: IndicadorIncentivoFiscal;
   regEspTrib?: RegimeEspecialTributacao;
-  vRedBCISS?: number;
+  vRedBciss?: number;
 }
